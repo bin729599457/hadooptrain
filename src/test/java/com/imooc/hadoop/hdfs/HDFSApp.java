@@ -98,6 +98,17 @@ public class HDFSApp {
 
         IOUtils.copyBytes(inputStream,outputStream,4096);
     }
+
+    /**
+     * 从HDFS下载文件到本地
+     * @throws Exception
+     */
+    @Test
+    public void copyToLocalFile()throws Exception{
+        Path localPath=new Path("/Users/binbin/data/");
+        Path hdfsPath=new Path("/hdfsapi/test/b.txt");
+        fileSystem.copyToLocalFile(hdfsPath,localPath);//注意文件的顺序
+    }
     @Before
     public void setUp()throws Exception{
         configured=new Configuration();
