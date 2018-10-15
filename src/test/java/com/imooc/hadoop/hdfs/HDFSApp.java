@@ -1,10 +1,7 @@
 package com.imooc.hadoop.hdfs;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FSDataInputStream;
-import org.apache.hadoop.fs.FSDataOutputStream;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.*;
 import org.apache.hadoop.io.IOUtils;
 import org.apache.hadoop.util.Progressable;
 import org.junit.After;
@@ -109,6 +106,24 @@ public class HDFSApp {
         Path hdfsPath=new Path("/hdfsapi/test/b.txt");
         fileSystem.copyToLocalFile(hdfsPath,localPath);//注意文件的顺序
     }
+
+    /**
+     * 查看某个目录下的所有文件
+     * @throws Exception
+     */
+    @Test
+    public void listFiles()throws Exception{
+        FileStatus[] fileStatuses=fileSystem.listStatus(new Path("/hdfsapi/test/"));
+        for(FileStatus fileStatus:fileStatuses){
+            String isDir=fileStatus.isDirectory()?"Directory":"file";
+            short replication=fileStatus.getReplication();
+            long len=fileStatus.getLen();
+            String path=fileStatus.getPath().toString();
+
+            System.out.println(isDir+"\t"+replication+"\t"+len+"\t"+path);
+        }
+    }
+
     @Before
     public void setUp()throws Exception{
         configured=new Configuration();
