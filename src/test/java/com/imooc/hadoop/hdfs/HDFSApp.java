@@ -1,12 +1,15 @@
 package com.imooc.hadoop.hdfs;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import sun.nio.ch.IOUtil;
 
 import java.net.URI;
 
@@ -39,6 +42,17 @@ public class HDFSApp {
         outputStream.write("hello hadoop".getBytes());
         outputStream.flush();
         outputStream.close();
+    }
+
+    /**
+     * 查看HDFS文件的内容
+     * @throws Exception
+     */
+    @Test
+    public void cat()throws Exception{
+        FSDataInputStream inputStream=fileSystem.open(new Path("/hdfsapi/test/a.txt"));
+        IOUtils.copyBytes(inputStream,System.out,1024);
+        inputStream.close();
     }
 
     @Before
