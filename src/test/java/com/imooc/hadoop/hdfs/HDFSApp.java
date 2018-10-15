@@ -66,6 +66,17 @@ public class HDFSApp {
         fileSystem.rename(oldPath,newPath);
     }
 
+    /**
+     * 上传文件到HDFS
+     * @throws Exception
+     */
+    @Test
+    public void copyFromLocalFile()throws Exception{
+        Path localPath=new Path("/Users/binbin/data/hello.txt");
+        Path hdfsPath=new Path("/hdfsapi/test/");
+        fileSystem.copyFromLocalFile(localPath,hdfsPath);
+    }
+
     @Before
     public void setUp()throws Exception{
         configured=new Configuration();
