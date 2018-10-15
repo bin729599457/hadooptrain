@@ -124,6 +124,15 @@ public class HDFSApp {
         }
     }
 
+    /**
+     *  删除文件/目录
+     * @throws Exception
+     */
+    @Test
+    public void delete()throws Exception{
+        fileSystem.delete(new Path("/hdfsapi/test/"),true);
+    }
+
     @Before
     public void setUp()throws Exception{
         configured=new Configuration();
