@@ -6,11 +6,15 @@ import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IOUtils;
+import org.apache.hadoop.util.Progressable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import sun.nio.ch.IOUtil;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URI;
 
 /**
@@ -77,6 +81,23 @@ public class HDFSApp {
         fileSystem.copyFromLocalFile(localPath,hdfsPath);
     }
 
+    /**
+     * 上传文件到HDFS带有进度条显示（上传大文件时使用）
+     * @throws Exception
+     */
+    @Test
+    public void copyFromLocalFileWithProgress()throws Exception{
+
+        InputStream inputStream=new BufferedInputStream(
+                new FileInputStream("/Users/binbin/data/HeadFirst.pdf"));
+        FSDataOutputStream outputStream =fileSystem.create(new Path("/hdfsapi/test/HeadFirst"), new Progressable() {
+            public void progress() {
+                System.out.print(".");//进度提醒信息
+            }
+        });
+
+        IOUtils.copyBytes(inputStream,outputStream,4096);
+    }
     @Before
     public void setUp()throws Exception{
         configured=new Configuration();
