@@ -7,7 +7,6 @@ import org.apache.hadoop.util.Progressable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import sun.nio.ch.IOUtil;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
