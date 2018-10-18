@@ -1,6 +1,7 @@
 package com.imooc.hadoop.mapreduce;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -66,6 +67,14 @@ public class WordCountApp {
 
         //创建Configuration
         Configuration configuration=new Configuration();
+
+        //准备清理已存在的输出目录
+        Path outputPath=new Path(args[1]);
+        FileSystem fileSystem=FileSystem.get(configuration);
+        if(fileSystem.exists(outputPath)){
+            fileSystem.delete(outputPath,true);
+            System.out.println("output file exists,but it has deleted");
+        }
 
         //创建job(作业)
         Job job=Job.getInstance(configuration,"wordcount");
