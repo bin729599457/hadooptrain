@@ -22,9 +22,10 @@ public class UserAgentTest {
         );
         UserAgentParser userAgentParser = new UserAgentParser();
         String line="";
+        int count=0;
         while (line!=null){
             line=bufferedReader.readLine();//一次读入一行
-
+            count++;
             if(StringUtils.isNotBlank(line)){
                 String source=line.substring(getCharacterPosition(line,"\"",5)+1);
                 UserAgent agent = userAgentParser.parse(source);
@@ -38,6 +39,7 @@ public class UserAgentTest {
 
             }
         }
+        System.out.println(count);
     }
 
     @Test
@@ -87,12 +89,7 @@ public class UserAgentTest {
         String os = agent.getOs();
         String platform = agent.getPlatform();
         boolean isMobile = agent.isMobile();
+        System.out.println("浏览器：" + browser+""+"引擎：" + engine+""+"引擎版本：" + engineVersion+""+"操作系统：" + os+""+"平台：" + platform+""+"是否是移动设备：" + isMobile);
 
-        System.out.println("浏览器：" + browser);
-        System.out.println("引擎：" + engine);
-        System.out.println("引擎版本：" + engineVersion);
-        System.out.println("操作系统：" + os);
-        System.out.println("平台：" + platform);
-        System.out.println("是否是移动设备：" + isMobile);
     }
 }
