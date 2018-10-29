@@ -31,11 +31,36 @@
       <artifactId>hadoop-client</artifactId>
       <version>${hadoop.version}</version>
     </dependency>
+    <!--添加UserAgent解析的依赖-->
+    <dependency>
+      <groupId>com.kumkee</groupId>
+      <artifactId>UserAgentParser</artifactId>
+      <version>0.0.1</version>
+    </dependency>
+
     <!--添加单元测试的依赖-->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.kumkee</groupId>
+      <artifactId>UserAgentParser</artifactId>
+      <version>0.0.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.kumkee</groupId>
+      <artifactId>UserAgentParser</artifactId>
+      <version>0.0.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.kumkee</groupId>
+      <artifactId>UserAgentParser</artifactId>
+      <version>0.0.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
