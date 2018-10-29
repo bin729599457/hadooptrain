@@ -11,5 +11,19 @@ public class UserAgentTest {
         UserAgentParser userAgentParser  = new UserAgentParser();
         UserAgent agent = userAgentParser.parse(source);
 
+        String browser = agent.getBrowser();
+        String engine = agent.getEngine();
+        String engineVersion = agent.getEngineVersion();
+        String os = agent.getOs();
+        String platform = agent.getPlatform();
+        boolean isMobile = agent.isMobile();
+
+        System.out.println("浏览器：" + browser);
+        System.out.println("引擎：" + engine);
+        System.out.println("引擎版本：" + engineVersion);
+        System.out.println("操作系统：" + os);
+        System.out.println("平台：" + platform);
+        System.out.println("是否是移动设备：" + isMobile);
+
     }
 }
