@@ -1,6 +1,8 @@
 package com.imooc.hadoop.mapreduce.project;
 
 import com.imooc.hadoop.mapreduce.WordCountApp;
+import com.kumkee.userAgent.UserAgentParser;
+import com.kumkee.userAgent.UserAgent;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -13,6 +15,8 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 使用MapReduce ：统计浏览器访问次数
@@ -25,20 +29,55 @@ public class LogApp {
     public static class MyMapper extends Mapper<LongWritable,Text,Text,LongWritable> {
 
         LongWritable one=new LongWritable(1);
+        private UserAgentParser userAgentParser;
+
+        @Override
+        protected void setup(Context context) throws IOException, InterruptedException {
+            userAgentParser=new UserAgentParser();
+        }
 
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-            //接收到的每一行数据
+
+            //接收到的每一行数据,其实就是一行日志信息
             String line=value.toString();
 
-            //安装指定分隔符进行分割
-            String[] words=line.split(" ");
+            String source=line.substring(getCharacterPosition(line,"\"",5)+1);
+            UserAgent agent = userAgentParser.parse(source);
+            String browser = agent.getBrowser();
+            String engine=agent.getEngine();
 
-            for(String word:words){
-                //通过上下文把map的处理结果输出
-                context.write(new Text(word),one);
+            //通过上下文把map的处理结果输出
+            context.write(new Text(browser),one);
+            context.write(new Text(engine),one);
+        }
+
+        @Override
+        protected void cleanup(Context context) throws IOException, InterruptedException {
+            userAgentParser=null;
+        }
+    }
+
+    /**
+     * 获取指定字符串中指定标识符的字符串出现的索引的位置
+     * @param value
+     * @param operator
+     * @param index
+     * @return
+     */
+    private static int getCharacterPosition(String value,String operator,int index){
+
+
+        Matcher matcher= Pattern.compile(operator).matcher(value);
+        int mIdx=0;
+        while (matcher.find()){
+            mIdx++;
+
+            if(mIdx==index){
+                break;
             }
         }
+        return matcher.start();
     }
 
     /**
@@ -78,21 +117,21 @@ public class LogApp {
         }
 
         //创建job(作业)
-        Job job=Job.getInstance(configuration,"wordcount");
+        Job job=Job.getInstance(configuration,"LogApp");
 
         //设置job的处理类
-        job.setJarByClass(WordCountApp.class);
+        job.setJarByClass(LogApp.class);
 
         //设置作业处理的输入路径
         FileInputFormat.setInputPaths(job,new Path(args[0]));
 
         //设置map相关的参数
-        job.setMapperClass(WordCountApp.MyMapper.class);
+        job.setMapperClass(LogApp.MyMapper.class);
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(LongWritable.class);
 
         //设置reduce相关参数
-        job.setReducerClass(WordCountApp.MyReducer.class);
+        job.setReducerClass(LogApp.MyReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(LongWritable.class);
 
