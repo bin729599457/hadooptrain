@@ -9,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +25,9 @@ public class UserAgentTest {
         UserAgentParser userAgentParser = new UserAgentParser();
         String line="";
         int count=0;
+
+        Map<String,Integer> browserMap=new HashMap<String, Integer>();
+
         while (line!=null){
             line=bufferedReader.readLine();//一次读入一行
             count++;
@@ -35,11 +40,24 @@ public class UserAgentTest {
                 String os = agent.getOs();
                 String platform = agent.getPlatform();
                 boolean isMobile = agent.isMobile();
+
+                Integer browserValue=browserMap.get(browser);
+                if(browserValue!=null){
+                    browserMap.put(browser,browserValue+1);
+                }else {
+                    browserMap.put(browser,1);
+                }
+
                 System.out.println("浏览器：" + browser+""+"引擎：" + engine+""+"引擎版本：" + engineVersion+""+"操作系统：" + os+""+"平台：" + platform+""+"是否是移动设备：" + isMobile);
 
             }
         }
+
         System.out.println(count);
+
+        for(Map.Entry<String,Integer> entry:browserMap.entrySet()){
+            System.out.println(entry.getKey()+":"+ entry.getValue());
+        }
     }
 
     @Test
